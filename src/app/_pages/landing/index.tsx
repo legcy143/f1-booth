@@ -10,7 +10,7 @@ export default function Landing() {
 
   const handleRedirect = (city: string) => {
     router.push("?city=" + city)
-    setCurrentPage("informationForm")
+    setCurrentPage("camera")
   }
   return (
     <div className='flex flex-col items-center  text-center animate-appearance-in'>
