@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "F1 booth | Quenth",
+  title: "Video Template Booth | Quenth",
 };
 
 export default function RootLayout({

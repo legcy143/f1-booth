@@ -1,14 +1,14 @@
 import { create } from 'zustand';
-import { F1Pages } from '../_pages/F1Pages';
+import { VideoTemplatePageType } from '../_pages/VideoTemplatePages';
 
 
 interface PaggingStore {
-    currentPage: F1Pages | null;
-    setCurrentPage: (page: F1Pages) => void;
+    currentPage: VideoTemplatePageType | null;
+    setCurrentPage: (page: VideoTemplatePageType) => void;
 }
 
 const usePagging = create<PaggingStore>((set) => ({
-    currentPage: "landing",
+    currentPage: "videoUpload",
     setCurrentPage: (page) => set({ currentPage: page }),
 }));
 
