@@ -18,12 +18,31 @@ export default function VideoUpload() {
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type.startsWith('video/')) {
-      setSelectedFile(file);
-      const url = URL.createObjectURL(file);
-      setVideoUrl(url);
-      setIsPlaying(false);
+    if (!file) return;
+
+    // Check file type - only MP4
+    if (file.type !== 'video/mp4') {
+      alert('Please select an MP4 video file only.');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
     }
+
+    // Check file size - maximum 100MB
+    const maxSize = 100 * 1024 * 1024; // 100MB in bytes
+    if (file.size > maxSize) {
+      alert('File size must be less than 100MB. Please select a smaller video.');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
+
+    setSelectedFile(file);
+    const url = URL.createObjectURL(file);
+    setVideoUrl(url);
+    setIsPlaying(false);
   };
 
   const handleUploadClick = () => {
@@ -85,7 +104,7 @@ export default function VideoUpload() {
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Upload Your Video</h3>
                   <p>Click here to select a video file from your device</p>
-                  <p className="text-sm mt-2">Supports MP4, MOV, AVI formats</p>
+                  <p className="text-sm mt-2">Only MP4 format • Maximum 100MB</p>
                 </div>
               </div>
             </div>
@@ -140,7 +159,7 @@ export default function VideoUpload() {
           <input
             ref={fileInputRef}
             type="file"
-            accept="video/*"
+            accept="video/mp4"
             onChange={handleFileSelect}
             className="hidden"
           />
