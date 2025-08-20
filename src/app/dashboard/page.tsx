@@ -15,6 +15,8 @@ export default function DashboardPage() {
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
   const [selectedVideoTitle, setSelectedVideoTitle] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const numberOfDataPerPage = 10;
 
   useEffect(() => {
     fetchVideos();
@@ -70,18 +72,27 @@ export default function DashboardPage() {
     }
   ], []);
 
-  // Transform videos data for table
+  // Transform videos data for table with global index (reverse order - latest first)
   const tableData = useMemo(() => {
-    return videos.map((video, index) => ({
-      _id: video._id,
-      id: video._id,
-      videoNumber: `#${index + 1}`,
-      originalVideo: video.input,
-      outputVideo: video.output,
-      uploadDate: video.timeStamp,
-      uploadDateFormatted: formatDate(video.timeStamp),
-      actions: 'actions'
-    }));
+    // Reverse the videos array to show latest first
+    const reversedVideos = [...videos].reverse();
+    
+    return reversedVideos.map((video, reverseIndex) => {
+      // Latest video gets #1, second latest gets #2, etc.
+      const globalVideoNumber = reverseIndex + 1;
+      
+      return {
+        _id: video._id,
+        id: video._id,
+        videoNumber: `#${globalVideoNumber}`,
+        originalIndex: reverseIndex, // Store reverse index for reference
+        originalVideo: video.input,
+        outputVideo: video.output,
+        uploadDate: video.timeStamp,
+        uploadDateFormatted: formatDate(video.timeStamp),
+        actions: 'actions'
+      };
+    });
   }, [videos]);
 
   // Render cell content
@@ -187,7 +198,9 @@ export default function DashboardPage() {
               statusOptions={[]}
               renderCell={renderCell}
               className="min-h-[400px]"
-              numberOfDataPerPage={10}
+              numberOfDataPerPage={numberOfDataPerPage}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
             />
           </div>
         )}
