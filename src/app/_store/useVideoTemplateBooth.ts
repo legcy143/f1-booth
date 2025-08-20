@@ -5,7 +5,7 @@ import { create } from "zustand"
 interface StoryFormState {
     isUploadingVideo: boolean;
     video: File | string | null;
-    uploadVideo: (file: File) => Promise<void>;
+    uploadVideo: (file: File) => Promise<boolean>;
 }
 
 export const BASE_API_URL = "https://api.quenth.com"
@@ -26,10 +26,11 @@ export const useVideoTemplateBooth = create<StoryFormState>((set, get) => ({
                 }
             );
             set({ video: res.data.data });
-            return res.data.data;
+            return true; // Success case
         } catch (error) {
             console.error("Error uploading video:", error);
-            throw error;
+            set({ video: null }); // Clear video on error
+            return false; // Failure case
         } finally {
             set({ isUploadingVideo: false });
         }

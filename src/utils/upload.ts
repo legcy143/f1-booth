@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const API_URL = 'https://api.quenth.com';
 
-export const uploadSingleFile = async (file: File) => {
+export const uploadSingleFile = async (file: File): Promise<string> => {
     if (!(file instanceof File)) {
-        return file;
+        throw new Error('Invalid file provided');
     }
     const formData = new FormData();
     formData.append('file', file);

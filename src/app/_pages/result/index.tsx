@@ -12,7 +12,9 @@ export default function Result() {
   const [showQR, setShowQR] = useState(false);
 
   const handleShowQR = () => {
-    setShowQR(true);
+    if (video && typeof video === 'string') {
+      setShowQR(true);
+    }
   };
 
   const handleUploadAnother = () => {

@@ -43,14 +43,11 @@ export default function VideoUpload() {
 
   const handleNext = async () => {
     if (selectedFile && !isUploadingVideo) {
-      try {
-        // Upload video using store function
-        await uploadVideo(selectedFile);
-        
-        // Navigate to result page
+      const success = await uploadVideo(selectedFile);
+      
+      if (success) {
         setCurrentPage("result");
-      } catch (error) {
-        console.error("Error uploading video:", error);
+      } else {
         alert("Failed to upload video. Please try again.");
       }
     }
