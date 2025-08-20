@@ -20,9 +20,9 @@ export default function VideoUpload() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Check file type - only MP4
-    if (file.type !== 'video/mp4') {
-      alert('Please select an MP4 video file only.');
+    // Check if it's a video file
+    if (!file.type.startsWith('video/')) {
+      alert('Please select a video file.');
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -104,7 +104,7 @@ export default function VideoUpload() {
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Upload Your Video</h3>
                   <p>Click here to select a video file from your device</p>
-                  <p className="text-sm mt-2">Only MP4 format • Maximum 100MB</p>
+                  <p className="text-sm mt-2">All video formats supported • Maximum 100MB</p>
                 </div>
               </div>
             </div>
@@ -159,7 +159,7 @@ export default function VideoUpload() {
           <input
             ref={fileInputRef}
             type="file"
-            accept="video/mp4"
+            accept="video/*"
             onChange={handleFileSelect}
             className="hidden"
           />
