@@ -1,23 +1,18 @@
 import usePagging from '@/app/_store/usePagging';
 import { useVideoTemplateBooth } from '@/app/_store/useVideoTemplateBooth';
 import ThemeButton from '@/components/ui/ThemeButton';
+import ShowQRModal from '@/components/ui/ShowQRModal';
 import React, { useState } from 'react';
-import { MdDownload, MdRefresh } from 'react-icons/md';
+import { MdRefresh, MdQrCode } from 'react-icons/md';
 
 export default function Result() {
   const setCurrentPage = usePagging(state => state.setCurrentPage);
   const { video } = useVideoTemplateBooth();
   const [isLoading, setIsLoading] = useState(false);
+  const [showQR, setShowQR] = useState(false);
 
-  const handleDownload = () => {
-    if (video && typeof video === 'string') {
-      const link = document.createElement('a');
-      link.href = video;
-      link.download = 'uploaded-video.mp4';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+  const handleShowQR = () => {
+    setShowQR(true);
   };
 
   const handleUploadAnother = () => {
@@ -26,7 +21,7 @@ export default function Result() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-6">
+      <div className="flex flex-col items-center justify-center p-6">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 mb-4 mx-auto"></div>
           <h2 className="text-xl font-semibold">Processing your video...</h2>
@@ -37,7 +32,7 @@ export default function Result() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6">
+    <div className="flex flex-col items-center justify-center  p-6">
       <div className="w-full max-w-2xl rounded-3xl p-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold mb-2">Upload Complete!</h1>
@@ -62,11 +57,11 @@ export default function Result() {
 
             <div className="flex gap-4 justify-center">
               <ThemeButton
-                onPress={handleDownload}
+                onPress={handleShowQR}
                 className="flex items-center gap-2 px-6"
               >
-                <MdDownload size={20} />
-                Download
+                <MdQrCode size={20} />
+                Generate QR
               </ThemeButton>
               <ThemeButton
                 onPress={handleUploadAnother}
@@ -91,6 +86,15 @@ export default function Result() {
           </div>
         )}
       </div>
+
+      {/* QR Code Modal */}
+      <ShowQRModal
+        isOpen={showQR}
+        onClose={() => setShowQR(false)}
+        videoSrc={typeof video === 'string' ? video : ''}
+        title="Scan QR Code"
+        description="Scan to watch your video"
+      />
     </div>
   );
 }
